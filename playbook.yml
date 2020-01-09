@@ -4,13 +4,13 @@
   hosts: all
   connection: local
   gather_facts: false
-
   tasks:
 
   - name: Add node
     bigip_node:
       host: 10.0.1.10
       name: 10.0.1.10
+      state: disabled
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
