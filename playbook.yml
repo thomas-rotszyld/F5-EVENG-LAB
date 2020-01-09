@@ -1,5 +1,11 @@
 ---
+#Playbook to modify Local Admin Account on IOS devices
+- name: Change Admin Local Account on IOS Devices
+  hosts: all
+  gather_facts: false
 
-- name: debug
-  debug:
+  tasks:
+
+  - name: debug
+    debug:
       msg: "{{ lookup('env','NETBOX_TOKEN') }}"
