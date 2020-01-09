@@ -12,7 +12,7 @@
       host: 10.0.1.10
       name: 10.0.1.10
       provider:
-        server: "{{ inventory_hostname }}"
+        server: "{{ inventory_hostname.ansible_host }}"
         user: "{{ lookup('env','F5_PASSWORD') }}"
-        password: "{{ lookup('env','F5_USERNAME') }}"
+      password: "{{ lookup('env','F5_USERNAME') }}"
     delegate_to: localhost
