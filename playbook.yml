@@ -8,11 +8,11 @@
   tasks:
 
   - name: Add node
-  bigip_node:
-    host: 10.0.1.10
-    name: 10.0.1.10
+    bigip_node:
+      host: 10.0.1.10
+      name: 10.0.1.10
     provider:
-      server: "{{ inventory_hostname }}"
-      user: "{{ lookup('env','F5_PASSWORD') }}"
-      password: "{{ lookup('env','F5_USERNAME') }}"
-  delegate_to: localhost
+        server: "{{ inventory_hostname }}"
+        user: "{{ lookup('env','F5_PASSWORD') }}"
+        password: "{{ lookup('env','F5_USERNAME') }}"
+    delegate_to: localhost
