@@ -7,9 +7,6 @@
 
   tasks:
 
-  - debug:
-        msg: "{{   }}"
-
   - name: Add node
     bigip_node:
       host: 10.0.1.10
