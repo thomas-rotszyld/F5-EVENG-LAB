@@ -7,13 +7,16 @@
 
   tasks:
 
+  - debug:
+        msg: "{{   }}"
+
   - name: Add node
     bigip_node:
       host: 10.0.1.10
       name: 10.0.1.10
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
-        user: "{{ lookup('env','F5_PASSWORD') }}"
-        password: "{{ lookup('env','F5_USERNAME') }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
