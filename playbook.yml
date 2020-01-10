@@ -6,7 +6,6 @@
   gather_facts: false
   tasks:
 
-
   - name: Create HTTP Monitor
     bigip_monitor_http:
       state: present
@@ -21,6 +20,47 @@
     delegate_to: localhost
     when: http_monitor_select == 'ENABLED'
 
+  - name: Create HTTPS Monitor
+    bigip_monitor_https:
+      state: present
+      name: my_http_monitor_EVENG
+      send: "{{ https_monitor_send  }}"
+      receive: "{{ https_monitor_receive }}"
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+    delegate_to: localhost
+    when: https_monitor_select == 'ENABLED'
+
+  - name: Create persistence profile based on source IP
+    bigip_profile_persistence_src_addr:
+      name: "{{ vs_name + 'persist_profile_src_ip' }}"
+      state: present
+      match_across_services: yes
+      match_across_virtuals: yes
+      mirror: yes
+      mask: 255.255.255.255
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+    delegate_to: localhost
+    when: profile_persistence_src_addr == 'ENABLED'
+
+  - name: Create a persistence cookie profile
+    bigip_profile_persistence_cookie:
+      name: "{{ vs_name + 'persist_profile_cookie' }}"
+      cookie_name: "{{ vs_name_cookie }}"
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+    delegate_to: localhost
+
   - name: Set list of nodes from survey
     set_fact:
       nodes: |
@@ -28,7 +68,6 @@
           | map("regex_replace", "^", "- {") 
           | map("regex_replace", "$", "}") 
           | join("\n") -%}
-
         {{ nodes | from_yaml}}
 
   - name: Add F5 nodes 
