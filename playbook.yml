@@ -38,7 +38,7 @@
     bigip_profile_persistence_src_addr:
       name: "{{ vs_name + 'persist_profile_src_ip' }}"
       state: present
-      match_across_services: yes
+      match_across_services: yes 
       match_across_virtuals: yes
       mirror: yes
       mask: 255.255.255.255
@@ -53,7 +53,7 @@
   - name: Create a persistence cookie profile
     bigip_profile_persistence_cookie:
       name: "{{ vs_name + 'persist_profile_cookie' }}"
-      cookie_name: "{{ vs_name_cookie }}"
+      cookie_name: "{{ vs_name + '_cookie' }}"
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
