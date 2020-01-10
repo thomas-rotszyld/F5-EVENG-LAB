@@ -6,6 +6,10 @@
   gather_facts: false
   tasks:
 
+  - name: debug
+    debug:
+      msg: "{{ nodes_list }}"
+
   - name: Set list of nodes
     set_fact:
       nodes: >-
