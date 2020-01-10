@@ -14,7 +14,7 @@
           join("\n") | from_yaml }}
 
   - debug:
-    msg: "{{  nodes_list  }}"
+      msg: "{{  nodes_list  }}"
 
   - name: Add node
     bigip_node:
