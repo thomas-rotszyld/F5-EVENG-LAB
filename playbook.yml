@@ -87,3 +87,9 @@
         validate_certs: no
     delegate_to: localhost
     loop: "{{ nodes }}"
+
+  - debug:
+      msg: "{{ persistence_profile }}"
+  
+  - debug:
+      msg: "{{ http_monitor }}"
