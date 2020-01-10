@@ -7,11 +7,11 @@
   tasks:
 
   - set_fact:
-    nodes_list: >-
-      {{ nodes_list.split("\n") | select | 
-         map("regex_replace", "^", "- {") | 
-         map("regex_replace", "$", "}") | 
-         join("\n") | from_yaml }}
+      nodes_list: >-
+        {{ nodes_list.split("\n") | select | 
+          map("regex_replace", "^", "- {") | 
+          map("regex_replace", "$", "}") | 
+          join("\n") | from_yaml }}
 
   - debug:
       msg: "{{  nodes_list  }}"
