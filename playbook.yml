@@ -13,7 +13,11 @@
   - name: Set list of nodes
     set_fact:
       nodes: |
-        {%- set nodes = nodes_list.split('\n') -%}
+        {%- set nodes = nodes_list.split('\n') | select 
+          | map("regex_replace", "^", "- {") 
+          | map("regex_replace", "$", "}") 
+          | join("\n") -%}
+
         {{ nodes }}
 
   - debug:
