@@ -9,7 +9,7 @@
   - name: Create HTTP Monitor
     bigip_monitor_http:
       state: present
-      name: my_http_monitor_EVENG
+      name: "{{ vs_name + '_http_monitor' }}"
       send: "{{ http_monitor_send  }}"
       receive: "{{ http_monitor_receive }}"
       provider:
@@ -18,12 +18,13 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
+    register: http_monitor
     when: http_monitor_select == 'ENABLED'
 
   - name: Create HTTPS Monitor
     bigip_monitor_https:
       state: present
-      name: my_http_monitor_EVENG
+      name: "{{ vs_name + '_https_monitor' }}"
       send: "{{ https_monitor_send  }}"
       receive: "{{ https_monitor_receive }}"
       provider:
@@ -32,11 +33,12 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
+    register: http_monitor
     when: https_monitor_select == 'ENABLED'
 
   - name: Create persistence profile based on source IP
     bigip_profile_persistence_src_addr:
-      name: "{{ vs_name + '_persist_profile_src_ip' }}"
+      name: "{{ vs_name + 'persist_profile_src_ip' }}"
       state: present
       match_across_services: yes 
       match_across_virtuals: yes
@@ -49,6 +51,7 @@
         validate_certs: no
     delegate_to: localhost
     when: persistence_profile_src_addr == 'ENABLED'
+    register: persistence_profile
 
   - name: Create a persistence cookie profile
     bigip_profile_persistence_cookie:
@@ -61,6 +64,7 @@
         validate_certs: no
     delegate_to: localhost
     when: persistence_profile_cookie =='ENABLED'
+    register: pesistence_profile
 
   - name: Set list of nodes from survey
     set_fact:
