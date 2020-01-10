@@ -12,11 +12,11 @@
 
   - name: Set list of nodes
     set_fact:
-      nodes: |
+      nodes: >-
         {{ nodes_list.split("\n") | select | 
           map("regex_replace", "^", "- {") | 
           map("regex_replace", "$", "}") | 
-          join("\n") | from_yaml }}
+          join("\n") }}
 
   - debug:
       msg: "{{  nodes_list  }}"
