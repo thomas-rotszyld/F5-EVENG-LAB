@@ -1,13 +1,14 @@
 ---
 #Playbook to modify Local Admin Account on IOS devices
-- name: Change Admin Local Account on IOS Devices
+- name: F5 Virtual Server Configuration
   hosts: all
   connection: local
   gather_facts: false
   tasks:
 
-  - set_fact:
-      nodes_list: >-
+  - name: Set list of nodes
+    set_fact:
+      nodes: >-
         {{ nodes_list.split("\n") | select | 
           map("regex_replace", "^", "- {") | 
           map("regex_replace", "$", "}") | 
