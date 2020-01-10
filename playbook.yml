@@ -20,7 +20,7 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
-    when: "{{ http_monitor select == 'ENABLED' }}"
+    when: http_monitor_select == 'ENABLED' }}"
 
   - name: Set list of nodes from survey
     set_fact:
