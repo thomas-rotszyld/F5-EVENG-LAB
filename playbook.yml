@@ -19,7 +19,7 @@
           join("\n") }}
 
   - debug:
-      msg: "{{  nodes_list  }}"
+      msg: "{{ nodes }}"
 
   - name: Add node
     bigip_node:
