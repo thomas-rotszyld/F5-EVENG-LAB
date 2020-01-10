@@ -6,10 +6,20 @@
   gather_facts: false
   tasks:
 
+  - set_fact:
+    nodes_list: >-
+      {{ nodes_list.split("\n") | select | 
+         map("regex_replace", "^", "- {") | 
+         map("regex_replace", "$", "}") | 
+         join("\n") | from_yaml }}
+
+  - debug:
+      msg: "{{  nodes_list  }}"
+
   - name: Add node
     bigip_node:
-      host: 10.0.1.10
-      name: 10.0.1.10
+      host: 10.0.1.20
+      name: site2
       state: disabled
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
