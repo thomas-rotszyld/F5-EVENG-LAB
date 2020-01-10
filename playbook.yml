@@ -12,7 +12,8 @@
 
   - name: Set list of nodes
     set_fact:
-      nodes: "{{ nodes_list.split('\n') }}"
+      nodes: |
+        {{ nodes_list.split('\n') }}
 
   - debug:
       msg: "{{ nodes }}"
