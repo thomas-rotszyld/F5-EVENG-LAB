@@ -13,7 +13,7 @@
       name: my_http_monitor_EVENG
       port: "{{ http_monitor_port }}"
       send: "{{ http_monitor_send  }}"
-      receive: "{{ http_monitor_receice }}"
+      receive: "{{ http_monitor_receive }}"
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
