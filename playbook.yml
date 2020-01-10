@@ -18,7 +18,7 @@
           | map("regex_replace", "$", "}") 
           | join("\n") -%}
 
-        {{ nodes }}
+        {{ nodes | from_yaml}}
 
   - debug:
       msg: "{{ nodes }}"
