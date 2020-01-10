@@ -48,7 +48,7 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
-    when: profile_persistence_src_addr == 'ENABLED'
+    when: persistence_profile_src_addr == 'ENABLED'
 
   - name: Create a persistence cookie profile
     bigip_profile_persistence_cookie:
@@ -60,6 +60,7 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
+    when: persistence_profile_cookie =='ENABLED'
 
   - name: Set list of nodes from survey
     set_fact:
