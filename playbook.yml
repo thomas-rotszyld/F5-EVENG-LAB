@@ -6,6 +6,22 @@
   gather_facts: false
   tasks:
 
+
+  - name: Create HTTP Monitor
+    bigip_monitor_http:
+      state: present
+      name: my_http_monitor_EVENG
+      port: "{{ http_monitor_port }}"
+      send: "{{ http_monitor_send  }}"
+      receive: "{{ http_monitor_receice }}"
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+    delegate_to: localhost
+    when: http_monitor select == 'ENABLED'
+
   - name: Set list of nodes from survey
     set_fact:
       nodes: |
