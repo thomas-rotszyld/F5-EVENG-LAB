@@ -12,7 +12,7 @@
 
   - name: Set list of nodes
     set_fact:
-      nodes: >-
+      nodes: |
         {{ nodes_list.split("\n") | select | 
           map("regex_replace", "^", "- {") | 
           map("regex_replace", "$", "}") | 
