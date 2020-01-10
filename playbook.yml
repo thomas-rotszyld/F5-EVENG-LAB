@@ -6,11 +6,7 @@
   gather_facts: false
   tasks:
 
-  - name: debug
-    debug:
-      msg: "{{ nodes_list }}"
-
-  - name: Set list of nodes
+  - name: Set list of nodes from survey
     set_fact:
       nodes: |
         {%- set nodes = nodes_list.split('\n') | select 
@@ -20,13 +16,10 @@
 
         {{ nodes | from_yaml}}
 
-  - debug:
-      msg: "{{ nodes }}"
-
-  - name: Add node
+  - name: Add F5 nodes 
     bigip_node:
-      host: 10.0.1.20
-      name: site2
+      host: "{{ item.node_ip  }}"
+      name: "{{ item.node_name }}"
       state: disabled
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
@@ -34,3 +27,4 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
+    loop: "{{ nodes }}"
