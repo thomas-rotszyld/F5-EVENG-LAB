@@ -102,6 +102,17 @@
     register: pesistence_profile
     when: persistence_profile_cookie =='ENABLED'
 
+  - name: set-up persistence profile name
+    set_fact:
+      persistence_profile_name: |
+            {%- if persistence_profile_src_addr == 'ENABLED' -%}
+            {%- set profile_name = vs_name + '_persist_profile_src_ip' }
+            {%- elif persistence_profile_cookie == 'ENABLED' -%}
+            {%- set profile_name = vs_name + vs_name + '_persist_profile_cookie' }
+            {%- endif -%}
+            {{ profile_name }}
+  - debug:
+      msg: "{{ persistence_profile_name }}"
 
   - name: Set list of Monitor for Pool
     set_fact:
@@ -134,7 +145,7 @@
   - debug:
       msg: "{{ nodes }}"
 
-  - name: Add F5 nodes 
+  - name: Add pool members
     bigip_pool_member:
       pool: "{{ vs_name + '_pool'  }}"
       host: "{{ item.node_ip  }}"
@@ -148,3 +159,24 @@
         validate_certs: no
     delegate_to: localhost
     loop: "{{ nodes }}"
+
+  # - name: Add virtual server without SNAT
+  #   bigip_virtual_server:
+  #     state: present
+  #     partition: Common
+  #     name: "{{ 'vs_' + vs_name }}"
+  #   destination: "{{ vs_ip }}"
+  #   port: "{{ vs_port }}"
+  #   pool: "{{ vs_name + '_pool'  }}"
+  #   ip_protocol: tcp
+  #   snat: "{{ vs_snat }}"
+  #   profiles:
+  #     - http
+  #   enabled_vlans:
+  #     - all
+  #   provider:
+  #     server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+  #     user: "{{ lookup('env','F5_USERNAME') }}"
+  #     password: "{{ lookup('env','F5_PASSWORD') }}"
+  #     validate_certs: no
+  #   delegate_to: localhost
