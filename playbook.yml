@@ -28,7 +28,7 @@
     bigip_monitor_tcp:
       state: present
       name: "{{ 'tcp_monitor_' + tcp_monitor_port|string }}"
-      port: "{{ tcp_monitor_port }}"
+      port: "{{ tcp_monitor_port|string }}"
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
