@@ -75,7 +75,7 @@
       match_across_services: yes 
       match_across_virtuals: yes
       #mirror: yes
-      mask: 255.255.255.255
+      #mask: 255.255.255.255
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
