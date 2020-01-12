@@ -102,9 +102,10 @@
       gather_subset:
         - tcp-monitors
       provider:
-        server: lb.mydomain.com
-        user: admin
-        password: secret
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
     delegate_to: localhost
     register: results
 
