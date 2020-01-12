@@ -97,7 +97,7 @@
         validate_certs: no
     delegate_to: localhost
 
-  - name: Collect BIG-IP information
+  - name: Collect BIG-IP TCP MONITOR
     bigip_device_facts:  
       gather_subset:
         - tcp-monitors
@@ -110,7 +110,7 @@
     register: results
 
   - debug:
-      msg: "{{ results  }}"
+      msg: "{{ results['tcp_monitors']| map(attribute='name')| list  }}"
 
   - name: Add F5 nodes 
     bigip_node:
