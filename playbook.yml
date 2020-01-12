@@ -97,6 +97,19 @@
         validate_certs: no
     delegate_to: localhost
 
+  - name: Collect BIG-IP information
+    bigip_device_info:
+      gather_subset:
+        - tcp-monitors
+      provider:
+        server: lb.mydomain.com
+        user: admin
+        password: secret
+    delegate_to: localhost
+    register: results
+
+  - debug:
+      msg: "{{ results  }}"
 
   - name: Add F5 nodes 
     bigip_node:
