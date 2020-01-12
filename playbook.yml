@@ -69,7 +69,7 @@
 
   - name: Set list of Monitor for Pool
     set_fact:
-      monitors: "{{ 'dummy' }}"
+      monitors: "{{ 'dummy'| monitors_list }}"
   
   - debug:
       msg: "{{ monitors }}"
