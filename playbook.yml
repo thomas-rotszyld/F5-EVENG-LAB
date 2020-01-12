@@ -74,8 +74,6 @@
   - debug:
       msg: "{{ monitors_list }}"
 
-
-
   - name: Set list of nodes from survey
     set_fact:
       nodes: |
