@@ -19,7 +19,7 @@
         validate_certs: no
     delegate_to: localhost
     register: http_monitor
-    when: http_monitor_select == 'ENABLED'
+    when:  http_monitor_select == 'ENABLED'
 
   - name: Create HTTPS Monitor
     bigip_monitor_https:
@@ -53,7 +53,6 @@
     register: persistence_profile
     when: persistence_profile_src_addr == 'ENABLED'
 
-
   - name: Create a persistence cookie profile
     bigip_profile_persistence_cookie:
       name: "{{ vs_name + '_persist_profile_cookie' }}"
@@ -68,6 +67,15 @@
     when: persistence_profile_cookie =='ENABLED'
 
 
+  - name: Set list of Monitor for Pool
+    set_fact:
+      monitors_list: "{{ 'dummy' | monitors_list  }}"
+  
+  - debug:
+      msg: "{{ monitors_list }}"
+
+
+
   - name: Set list of nodes from survey
     set_fact:
       nodes: |
@@ -76,6 +84,23 @@
           | map("regex_replace", "$", "}") 
           | join("\n") -%}
         {{ nodes | from_yaml}}
+
+  - name: Set multiple monitors (all must succeed)
+    bigip_pool:
+      state: present
+      name: my-pool
+      partition: Common
+      monitor_type: and_list
+      monitors:
+        - http
+        - tcp
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+      delegate_to: localhost
+
 
   - name: Add F5 nodes 
     bigip_node:
@@ -89,9 +114,3 @@
         validate_certs: no
     delegate_to: localhost
     loop: "{{ nodes }}"
-
-  - debug:
-      msg: "{{ persistence_profile }}"
-  
-  - debug:
-      msg: "{{ http_monitor }}"
