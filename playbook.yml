@@ -162,23 +162,24 @@
     delegate_to: localhost
     loop: "{{ nodes }}"
 
-  # - name: Add virtual server without SNAT
-  #   bigip_virtual_server:
-  #     state: present
-  #     partition: Common
-  #     name: "{{ 'vs_' + vs_name }}"
-  #   destination: "{{ vs_ip }}"
-  #   port: "{{ vs_port }}"
-  #   pool: "{{ vs_name + '_pool'  }}"
-  #   ip_protocol: tcp
-  #   snat: "{{ vs_snat }}"
-  #   profiles:
-  #     - http
-  #   enabled_vlans:
-  #     - all
-  #   provider:
-  #     server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
-  #     user: "{{ lookup('env','F5_USERNAME') }}"
-  #     password: "{{ lookup('env','F5_PASSWORD') }}"
-  #     validate_certs: no
-  #   delegate_to: localhost
+  - name: Add virtual server without SNAT
+    bigip_virtual_server:
+      state: present
+      partition: Common
+      name: "{{ 'vs_' + vs_name }}"
+    destination: "{{ vs_ip }}"
+    port: "{{ vs_port }}"
+    pool: "{{ vs_name + '_pool'  }}"
+    ip_protocol: tcp
+    snat: "{{ vs_snat }}"
+    default_persistence_profile: "{{ persistence_profile_name.split('\n')[0] }}"
+    profiles:
+      - http
+    enabled_vlans:
+      - all
+    provider:
+      server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+      user: "{{ lookup('env','F5_USERNAME') }}"
+      password: "{{ lookup('env','F5_PASSWORD') }}"
+      validate_certs: no
+    delegate_to: localhost
