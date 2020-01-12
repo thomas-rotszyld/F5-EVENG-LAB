@@ -69,10 +69,10 @@
 
   - name: Set list of Monitor for Pool
     set_fact:
-      monitors: "{{  vs_name  }}"
+      monitors_list: "{{  'dummy' | monitors_list }}"
   
   - debug:
-      msg: "{{ monitors }}"
+      msg: "{{ monitors_list }}"
 
   - name: Set list of nodes from survey
     set_fact:
