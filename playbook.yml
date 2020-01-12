@@ -70,7 +70,7 @@
 
   - name: Create persistence profile based on source IP
     bigip_profile_persistence_src_addr:
-      name: "{{ vs_name + 'persist_profile_src_ip' }}"
+      name: "{{ vs_name + '_persist_profile_src_ip' }}"
       state: present
       match_across_services: yes 
       match_across_virtuals: yes
@@ -103,8 +103,20 @@
     set_fact:
       monitors_list: "{{  'dummy' | monitors_list(http_monitor_select, https_monitor_select, vs_name) }}"
   
-  - debug:
-      msg: "{{ monitors_list }}"
+  - name: Create dedicated Pool for the Virtual Server
+    bigip_pool:
+      state: present
+      name: "{{ vs_name + '_pool'  }}"
+      partition: Common
+      monitor_type: and_list
+      lb_method: "{{ lb_algorithm  }}"
+      monitors: "{{ monitors_list  }}"
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+    delegate_to: localhost
 
   - name: Set list of nodes from survey
     set_fact:
@@ -115,25 +127,13 @@
           | join("\n") -%}
         {{ nodes | from_yaml}}
 
-  - name: Set multiple monitors (all must succeed)
-    bigip_pool:
-      state: present
-      name: "{{ vs_name + '_pool'  }}"
-      partition: Common
-      monitor_type: and_list
-      monitors: "{{ monitors_list  }}"
-      provider:
-        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
-        user: "{{ lookup('env','F5_USERNAME') }}"
-        password: "{{ lookup('env','F5_PASSWORD') }}"
-        validate_certs: no
-    delegate_to: localhost
-
   - name: Add F5 nodes 
-    bigip_node:
+    bigip_pool_member:
+      pool: "{{ vs_name + '_pool'  }}"
       host: "{{ item.node_ip  }}"
+      port: "{{ item.node_port }}"
       name: "{{ item.node_name }}"
-      state: disabled
+      state: enabled
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
