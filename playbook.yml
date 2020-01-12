@@ -42,6 +42,8 @@
     bigip_monitor_http:
       state: present
       name: "{{ vs_name + '_http_monitor' }}"
+      ip: '*'
+      port: "{{ http_monitor_port|string }}"
       send: "{{ http_monitor_send  }}"
       receive: "{{ http_monitor_receive }}"
       provider:
@@ -57,6 +59,8 @@
     bigip_monitor_https:
       state: present
       name: "{{ vs_name + '_https_monitor' }}"
+      ip: '*'
+      port: "{{ https_monitor_port|string }}"
       send: "{{ https_monitor_send  }}"
       receive: "{{ https_monitor_receive }}"
       provider:
@@ -101,8 +105,9 @@
 
   - name: Set list of Monitor for Pool
     set_fact:
-      monitors_list: "{{  'dummy' | monitors_list(http_monitor_select, https_monitor_select, vs_name) }}"
-  
+      monitors_list: "{{  'dummy' | 
+        monitors_list(tcp_monitor_select, tcp_monitor_port, http_monitor_select, https_monitor_select, vs_name) }}"
+
   - name: Create dedicated Pool for the Virtual Server
     bigip_pool:
       state: present
