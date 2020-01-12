@@ -6,6 +6,40 @@
   gather_facts: false
   tasks:
 
+  - name: Collect BIG-IP TCP MONITORS
+    bigip_device_facts:  
+      gather_subset:
+        - tcp-monitors
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+    delegate_to: localhost
+    register: results
+    when: tcp_monitor_select == 'ENABLED'
+
+  - name: Retrieve existing TCP Monitors
+    set_fact: 
+      tcp_existing_monitors: "{{ results['tcp_monitors']| map(attribute='name')| list  }}"
+    when: tcp_monitor_select == 'ENABLED'
+
+  - name: Create TCP Monitor
+    bigip_monitor_tcp:
+      state: present
+      name: "{{ 'tcp_monitor_' + tcp_monitor_port|string }}"
+      port: "{{ tcp_monitor_port }}"
+      provider:
+        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        user: "{{ lookup('env','F5_USERNAME') }}"
+        password: "{{ lookup('env','F5_PASSWORD') }}"
+        validate_certs: no
+    delegate_to: localhost    
+    when: tcp_monitor_select == 'ENABLED' and "{{ 'tcp_monitor' +  tcp_monitor_port|string not in tcp_existing_monitors }}"
+      
+
+
+
   - name: Create HTTP Monitor
     bigip_monitor_http:
       state: present
@@ -96,21 +130,6 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
-
-  - name: Collect BIG-IP TCP MONITOR
-    bigip_device_facts:  
-      gather_subset:
-        - tcp-monitors
-      provider:
-        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
-        user: "{{ lookup('env','F5_USERNAME') }}"
-        password: "{{ lookup('env','F5_PASSWORD') }}"
-        validate_certs: no
-    delegate_to: localhost
-    register: results
-
-  - debug:
-      msg: "{{ results['tcp_monitors']| map(attribute='name')| list  }}"
 
   - name: Add F5 nodes 
     bigip_node:
