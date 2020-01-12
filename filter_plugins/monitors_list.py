@@ -2,12 +2,12 @@
 import copy
 
 class FilterModule(object):
-    def filters(self):
+    def filters(self, dummy_variable):
         return {
             'monitors_list': self.monitors_list
         }
 
-    def monitors_list(self):
+    def monitors_list(self, dummy_variable):
         monitors_list = []
         if http_monitor_select == 'ENABLED':
             http_monitor = {'http_monitor_enabled': True, 'http_monitor_name': vs_name + '_http_monitor'}
