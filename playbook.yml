@@ -83,21 +83,21 @@
           | join("\n") -%}
         {{ nodes | from_yaml}}
 
-  - name: Set multiple monitors (all must succeed)
-    bigip_pool:
-      state: present
-      name: my-pool
-      partition: Common
-      monitor_type: and_list
-      monitors:
-        - http
-        - tcp
-      provider:
-        server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
-        user: "{{ lookup('env','F5_USERNAME') }}"
-        password: "{{ lookup('env','F5_PASSWORD') }}"
-        validate_certs: no
-      delegate_to: localhost
+  # - name: Set multiple monitors (all must succeed)
+  #   bigip_pool:
+  #     state: present
+  #     name: my-pool
+  #     partition: Common
+  #     monitor_type: and_list
+  #     monitors:
+  #       - http
+  #       - tcp
+  #     provider:
+  #       server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+  #       user: "{{ lookup('env','F5_USERNAME') }}"
+  #       password: "{{ lookup('env','F5_PASSWORD') }}"
+  #       validate_certs: no
+  #     delegate_to: localhost
 
 
   - name: Add F5 nodes 
