@@ -126,6 +126,8 @@
           | map("regex_replace", "$", "}") 
           | join("\n") -%}
         {{ nodes | from_yaml}}
+  - debug:
+      msg: "{{ nodes }}"
 
   - name: Add F5 nodes 
     bigip_pool_member:
