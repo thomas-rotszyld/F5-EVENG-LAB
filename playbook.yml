@@ -114,7 +114,7 @@
             {%- endif -%}
             {{ profile_name }}
   - debug:
-      msg: "{{ persistence_profile_name.split('/n')[0] }}"
+      msg: "{{ persistence_profile_name.split('\n')[0] }}"
 
   - name: Set list of Monitor for Pool
     set_fact:
