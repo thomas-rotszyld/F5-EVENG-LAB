@@ -7,7 +7,7 @@ class FilterModule(object):
             'monitors_list': self.monitors_list
         }
 
-    def monitors_list(self, dummy_variable, http_monitor_select, https_monitor_select):
+    def monitors_list(self, dummy_variable, http_monitor_select, https_monitor_select, vs_name):
         monitors_list = []
         if http_monitor_select == 'ENABLED':
             http_monitor = {'http_monitor_enabled': True, 'http_monitor_name': vs_name + '_http_monitor'}

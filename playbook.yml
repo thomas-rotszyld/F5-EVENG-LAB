@@ -69,7 +69,7 @@
 
   - name: Set list of Monitor for Pool
     set_fact:
-      monitors_list: "{{  'dummy' | monitors_list(http_monitor_select, https_monitor_select) }}"
+      monitors_list: "{{  'dummy' | monitors_list(http_monitor_select, https_monitor_select, vs_name) }}"
   
   - debug:
       msg: "{{ monitors_list }}"
