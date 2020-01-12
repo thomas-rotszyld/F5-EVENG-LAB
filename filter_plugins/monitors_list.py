@@ -2,7 +2,7 @@
 import copy
 
 class FilterModule(object):
-    def filters(self, dummy_variable):
+    def filters(self):
         return {
             'monitors_list': self.monitors_list
         }
