@@ -168,7 +168,7 @@
       partition: Common
       name: "{{ 'vs_' + vs_name }}"
       destination: "{{ vs_ip }}"
-      port: "{{ vs_port }}"
+      port: "{{ vs_port | string }}"
       pool: "{{ vs_name + '_pool'  }}"
       ip_protocol: tcp
       snat: "{{ vs_snat }}"
