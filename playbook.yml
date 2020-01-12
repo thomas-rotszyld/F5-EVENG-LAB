@@ -36,7 +36,7 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost    
-    when: tcp_monitor_select == 'ENABLED' and "{{ 'tcp_monitor' +  tcp_monitor_port|string not in tcp_existing_monitors }}"
+    when: tcp_monitor_select == 'ENABLED'
       
 
 
@@ -75,10 +75,10 @@
     bigip_profile_persistence_src_addr:
       name: "{{ vs_name + 'persist_profile_src_ip' }}"
       state: present
-      match_across_services: yes 
-      match_across_virtuals: yes
-      mirror: yes
-      mask: 255.255.255.255
+      # match_across_services: yes 
+      # match_across_virtuals: yes
+      # mirror: yes
+      # mask: 255.255.255.255
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
