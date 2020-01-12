@@ -38,9 +38,6 @@
     delegate_to: localhost    
     when: tcp_monitor_select == 'ENABLED'
       
-
-
-
   - name: Create HTTP Monitor
     bigip_monitor_http:
       state: present
@@ -77,8 +74,8 @@
       state: present
       # match_across_services: yes 
       # match_across_virtuals: yes
-      # mirror: yes
-      # mask: 255.255.255.255
+      mirror: yes
+      mask: 255.255.255.255
       provider:
         server: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
         user: "{{ lookup('env','F5_USERNAME') }}"
