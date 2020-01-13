@@ -108,7 +108,7 @@
             {%- if persistence_profile_src_addr == 'ENABLED' -%}
             {%- set profile_name = vs_name + '_persist_profile_src_ip' -%}
             {%- elif persistence_profile_cookie == 'ENABLED' -%}
-            {%- set profile_name = vs_name + vs_name + '_persist_profile_cookie' -%}
+            {%- set profile_name = vs_name + '_persist_profile_cookie' -%}
             {%- else -%}
             {%- set profile_name = '' -%}
             {%- endif -%}
