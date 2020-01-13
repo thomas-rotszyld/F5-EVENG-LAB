@@ -162,7 +162,7 @@
     delegate_to: localhost
     loop: "{{ nodes }}"
 
-  - name: Add virtual server without SNAT
+  - name: Add virtual server
     bigip_virtual_server:
       state: present
       partition: Common
