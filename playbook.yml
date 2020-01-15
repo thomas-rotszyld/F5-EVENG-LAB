@@ -183,3 +183,31 @@
         password: "{{ lookup('env','F5_PASSWORD') }}"
         validate_certs: no
     delegate_to: localhost
+
+  - name: close servicenow request
+    snow_record:
+      username: admin
+      password: C@rcassonne11
+      instance: dev61554
+      state: present
+      table: sc_request
+      number: "{{ snow_request }}"
+      data:
+        work_notes: "Ansible Automation - VIP CREATED"
+        state: 3
+    delegate_to: localhost
+    become: false
+
+  - name: close servicenow request item
+    snow_record:
+      username: admin
+      password: C@rcassonne11
+      instance: dev61554
+      state: present
+      table: sc_req_item
+      number: "RITM{{ snow_request.split('REQ')[1] }}"
+      data:
+        work_notes: "Ansible Automation - VIP CREATED"
+        state: 3
+    delegate_to: localhost
+    become: false
